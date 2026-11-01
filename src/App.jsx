@@ -11,6 +11,7 @@ import { AddEquipmentModal } from './components/AddEquipmentModal';
 import { AIChatbotModal } from './components/AIChatbotModal';
 import { ReportModal } from './components/ReportModal';
 import { storageService } from './services/storageService';
+import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { 
   Bot, 
   Sparkles, 
@@ -23,7 +24,8 @@ import {
   GitBranch
 } from 'lucide-react';
 
-export default function App() {
+function MainApp() {
+  const { lang, t } = useLanguage();
   const [activeRole, setActiveRole] = useState(storageService.getActiveRole() || 'farmer');
   const [activeTab, setActiveTab] = useState('marketplace');
   
@@ -47,13 +49,14 @@ export default function App() {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(null);
-    }, 3800);
+    }, 3500);
   };
 
   const handleRoleChange = (newRole) => {
     storageService.setActiveRole(newRole);
     setActiveRole(newRole);
-    showNotification(`Switched persona to ${newRole === 'farmer' ? 'Farmer Mode' : newRole === 'customer' ? 'Bulk Buyer Desk' : 'Equipment Provider'}`);
+    const roleName = newRole === 'farmer' ? t('personas.farmer') : newRole === 'customer' ? t('personas.customer') : t('personas.provider');
+    showNotification(lang === 'hi' ? `भूमिका बदली गई: ${roleName}` : `Switched persona to ${roleName}`);
   };
 
   const handleRefreshData = () => {
@@ -68,25 +71,27 @@ export default function App() {
     handleRefreshData();
     setActiveConversationId(convId);
     setActiveTab('messages');
-    showNotification(`Opened negotiation channel for "${item.cropName || item.title}"`);
+    showNotification(lang === 'hi' ? `"${item.cropName || item.title}" हेतु बातचीत विंडो खुली` : `Opened negotiation channel for "${item.cropName || item.title}"`);
   };
 
   const handleToggleFollow = (target) => {
     const updated = storageService.toggleFollow(target);
     setFollows(updated);
     const isNow = updated.some(f => f.id === target.id);
-    showNotification(isNow ? `Added ${target.name} to followed network` : `Removed ${target.name} from followed network`);
+    showNotification(isNow 
+      ? (lang === 'hi' ? `${target.name} का अनुसरण प्रारंभ किया` : `Added ${target.name} to followed network`)
+      : (lang === 'hi' ? `${target.name} का अनुसरण समाप्त किया` : `Removed ${target.name} from followed network`));
   };
 
   const isFollowing = (id) => follows.some(f => f.id === id);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 antialiased font-sans">
+    <div className={`min-h-screen bg-[#faf9f6] flex flex-col text-stone-850 antialiased font-sans ${lang === 'hi' ? 'hindi-text' : ''}`}>
       
       {/* Toast Notification Banner */}
       {toastMessage && (
-        <div className="fixed top-20 right-5 z-50 animate-in slide-in-from-top-4 fade-in duration-300">
-          <div className="bg-slate-900/95 backdrop-blur-md text-white px-4 py-3 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center gap-3 text-xs sm:text-sm font-medium">
+        <div className="fixed top-20 right-5 z-50 animate-in slide-in-from-top-4 fade-in duration-200">
+          <div className="bg-stone-900/95 backdrop-blur-md text-white px-4 py-3 rounded-2xl shadow-xl border border-stone-850 flex items-center gap-3 text-xs sm:text-sm font-semibold">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{toastMessage}</span>
           </div>
@@ -105,7 +110,7 @@ export default function App() {
       />
 
       {/* Dynamic Workspace Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'marketplace' && (
           <ProduceMarketplace
             produceList={produceList}
@@ -162,13 +167,13 @@ export default function App() {
       <aside aria-label="AI Platform Assistant" className="fixed bottom-6 right-6 z-40">
         <button
           onClick={() => setIsChatbotOpen(true)}
-          className="group relative flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-emerald-700 to-green-600 text-white font-bold text-sm shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 border-2 border-emerald-400/40"
+          className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 border-2 border-emerald-500/40 cursor-pointer"
         >
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
             <Bot className="w-4 h-4 text-emerald-200 group-hover:rotate-12 transition-transform" />
           </div>
-          <span className="hidden sm:inline">Kisan Sahayak</span>
-          <span className="text-xs bg-amber-400 text-gray-950 font-black px-1.5 py-0.5 rounded-full">
+          <span>{t('brand.aiAssistantBtn')}</span>
+          <span className="text-[10px] bg-amber-400 text-stone-950 font-black px-1.5 py-0.2 rounded-full">
             AI
           </span>
           <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-400 rounded-full border-2 border-white animate-ping" />
@@ -203,60 +208,70 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 mt-12 py-8">
+      <footer className="bg-white border-t border-stone-200 mt-16 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-slate-100">
-            <div className="space-y-1">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-stone-100">
+            <div className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <Wheat className="w-5 h-5 text-emerald-600" />
-                <span className="font-extrabold text-base text-slate-900">Kisan Setu (किसान सेतु)</span>
-                <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                <Wheat className="w-5 h-5 text-emerald-800" />
+                <span className="font-extrabold text-base text-stone-900">
+                  {lang === 'hi' ? 'किसान सेतु (Kisan Setu)' : 'Kisan Setu (किसान सेतु)'}
+                </span>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
                   Minor Project 2026
                 </span>
               </div>
-              <p className="text-xs text-slate-500 max-w-xl">
-                Digital Agricultural Marketplace and Farmer Support Platform designed for direct farm-gate commodity trade, agricultural equipment custom hiring, and safe AI onboarding.
+              <p className="text-xs text-stone-500 max-w-xl leading-relaxed">
+                {t('footer.desc')}
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-stone-600">
               <button 
                 onClick={() => setIsReportOpen(true)}
-                className="hover:text-emerald-700 flex items-center gap-1 transition-colors"
+                className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <GraduationCap className="w-4 h-4 text-emerald-600" />
-                University Project Report (32 Pages)
+                <GraduationCap className="w-4 h-4 text-emerald-700" />
+                <span>{t('brand.viewReport')}</span>
               </button>
               <button 
                 onClick={() => setActiveTab('architecture')}
-                className="hover:text-emerald-700 flex items-center gap-1 transition-colors"
+                className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <Layers className="w-4 h-4 text-blue-600" />
-                4-Layer Architecture
+                <Layers className="w-4 h-4 text-stone-600" />
+                <span>{t('nav.architecture')}</span>
               </button>
               <a 
                 href="https://github.com/ishigami077-ui/Minor-Project26" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="hover:text-slate-900 flex items-center gap-1 transition-colors"
+                className="hover:text-stone-900 flex items-center gap-1.5 transition-colors"
               >
                 <GitBranch className="w-4 h-4" />
-                GitHub Repository
+                <span>GitHub Repository</span>
               </a>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-stone-500 gap-3 font-medium">
             <div>
-              Department of Computer Science and Engineering &middot; <strong>G H Raisoni University, Saikheda</strong>
+              {t('footer.universityAttribution')}
             </div>
             <div>
-              Students: Misty J. &middot; Namrata J. &middot; Naved M. &middot; Neel T. &middot; Supervised by: <strong>Dr. Rahul Khokale</strong>
+              {t('footer.studentsAttribution')}
             </div>
           </div>
         </div>
       </footer>
 
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <MainApp />
+    </LanguageProvider>
   );
 }

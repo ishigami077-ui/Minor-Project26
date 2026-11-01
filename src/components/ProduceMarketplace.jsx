@@ -13,8 +13,13 @@ import {
   Scale,
   Sparkles,
   Info,
-  X
+  X,
+  PlusCircle,
+  ShieldCheck,
+  ArrowRight,
+  SlidersHorizontal
 } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export function ProduceMarketplace({
   produceList,
@@ -24,396 +29,351 @@ export function ProduceMarketplace({
   onOpenAddProduceModal,
   activeRole
 }) {
+  const { lang, t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedState, setSelectedState] = useState('All');
   const [minQty, setMinQty] = useState(0);
   const [activeModalItem, setActiveModalItem] = useState(null);
 
-  const categories = ['All', 'Cereals', 'Pulses', 'Oilseeds', 'Cash Crops', 'Horticulture'];
-  const states = ['All', 'Madhya Pradesh', 'Maharashtra', 'Haryana'];
+  const categories = [
+    { id: 'All', label: t('produce.allCategories') },
+    { id: 'Grains & Cereals', label: t('produce.catCereals') },
+    { id: 'Pulses (Dal)', label: t('produce.catPulses') },
+    { id: 'Cash Crops', label: t('produce.catCashCrops') },
+    { id: 'Vegetables', label: t('produce.catVegetables') },
+    { id: 'Fruits', label: t('produce.catFruits') },
+    { id: 'Oilseeds', label: t('produce.catOilseeds') },
+    { id: 'Spices', label: t('produce.catSpices') }
+  ];
+
+  const states = ['All', 'Maharashtra', 'Madhya Pradesh', 'Haryana'];
 
   const filteredProduce = produceList.filter((item) => {
-    const matchCat = selectedCategory === 'All' || item.category === selectedCategory;
-    const matchState = selectedState === 'All' || item.state === selectedState;
+    const matchCat =
+      selectedCategory === 'All' ||
+      item.category === selectedCategory ||
+      (selectedCategory === 'Grains & Cereals' && (item.category === 'Cereals' || item.category === 'Grains & Cereals')) ||
+      (selectedCategory === 'Pulses (Dal)' && (item.category === 'Pulses' || item.category === 'Pulses (Dal)'));
+    const matchState = selectedState === 'All' || (item.state && item.state.includes(selectedState)) || (item.location && item.location.includes(selectedState));
     const matchSearch =
       item.cropName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.district.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.farmerName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchQty = item.quantity >= minQty;
+      (item.district && item.district.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.location && item.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.farmerName && item.farmerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.variety && item.variety.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchQty = (item.quantity || 0) >= minQty;
     return matchCat && matchState && matchSearch && matchQty;
   });
 
   return (
-    <div className="space-y-6">
-      {/* Hero Header & Quick Stats */}
-      <div className="bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-        {/* Decorative backdrop shapes */}
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-emerald-700/30 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/3 -mb-16 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="max-w-2xl space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-700/60 border border-emerald-500/30 text-emerald-200 text-xs font-semibold backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              Direct Farm-Gate Procurement
-            </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-              Agricultural Produce Marketplace
-            </h1>
-            <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed">
-              Discover verified bulk harvest listings directly from farmers across Central India. Zero commission agents, transparent floor pricing, and bilateral negotiation.
-            </p>
+    <div className="space-y-8 animate-fade-in">
+      
+      {/* 1. Hero Banner */}
+      <div className="bg-gradient-to-br from-emerald-950 via-emerald-900 to-stone-900 rounded-3xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-emerald-700/15 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="relative z-10 max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/80 border border-emerald-400/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            {t('produce.badge')}
           </div>
+          
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            {t('produce.title')}
+          </h1>
+          
+          <p className="text-stone-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+            {t('produce.subtitle')}
+          </p>
 
-          {activeRole === 'farmer' && (
-            <div className="shrink-0">
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+            {activeRole === 'farmer' && (
               <button
                 onClick={onOpenAddProduceModal}
-                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-sm shadow-lg shadow-amber-400/20 hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                <Package className="w-4 h-4" />
-                + Post New Crop Harvest
+                <PlusCircle className="w-4 h-4 text-stone-950" />
+                <span>{t('produce.listCropBtn')}</span>
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* Metrics Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-emerald-700/60">
-          <div>
-            <div className="text-2xl font-black text-amber-300">
-              {produceList.reduce((acc, curr) => acc + curr.quantity, 0).toLocaleString()} Qtl
-            </div>
-            <div className="text-xs text-emerald-200 font-medium">Available Bulk Volume</div>
+        {/* Live Telemetry KPI Strip */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-8 mt-8 border-t border-emerald-800/60 text-left">
+          <div className="bg-white/5 backdrop-blur-xs p-3.5 rounded-2xl border border-white/10">
+            <p className="text-[11px] text-emerald-300 font-semibold uppercase tracking-wider">{t('produce.statLots')}</p>
+            <p className="text-xl sm:text-2xl font-black text-white mt-0.5">{produceList.length} Lots</p>
           </div>
-          <div>
-            <div className="text-2xl font-black text-white">{produceList.length} Lots</div>
-            <div className="text-xs text-emerald-200 font-medium">Active Farm Listings</div>
+          <div className="bg-white/5 backdrop-blur-xs p-3.5 rounded-2xl border border-white/10">
+            <p className="text-[11px] text-emerald-300 font-semibold uppercase tracking-wider">{t('produce.statGrowers')}</p>
+            <p className="text-xl sm:text-2xl font-black text-white mt-0.5">142 Farmers</p>
           </div>
-          <div>
-            <div className="text-2xl font-black text-emerald-300">0%</div>
-            <div className="text-xs text-emerald-200 font-medium">Middleman Margin / Cut</div>
+          <div className="bg-white/5 backdrop-blur-xs p-3.5 rounded-2xl border border-white/10">
+            <p className="text-[11px] text-emerald-300 font-semibold uppercase tracking-wider">{t('produce.statMandiCoverage')}</p>
+            <p className="text-xl sm:text-2xl font-black text-amber-300 mt-0.5">18 Mandis</p>
           </div>
-          <div>
-            <div className="text-2xl font-black text-amber-300">100%</div>
-            <div className="text-xs text-emerald-200 font-medium">Verified Farm-Gate Lots</div>
+          <div className="bg-white/5 backdrop-blur-xs p-3.5 rounded-2xl border border-white/10">
+            <p className="text-[11px] text-emerald-300 font-semibold uppercase tracking-wider">{t('produce.statArbitrage')}</p>
+            <p className="text-xl sm:text-2xl font-black text-emerald-400 mt-0.5">+18.5% Gain</p>
           </div>
         </div>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-4">
-        {/* Search Input and State dropdown */}
-        <div className="flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+      {/* 2. Search & Filtering Header */}
+      <div className="space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-3">
+          
+          {/* Main Search Input */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-stone-400 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search by crop name (Wheat, Soybean, Paddy), district, or farmer name..."
+              placeholder={t('produce.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
+              className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-white border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent font-medium shadow-2xs"
             />
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                className="absolute right-3.5 top-3 text-stone-400 hover:text-stone-700 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 w-full sm:w-auto">
-              <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-              <select
-                value={selectedState}
-                onChange={(e) => setSelectedState(e.target.value)}
-                className="bg-transparent focus:outline-none cursor-pointer w-full"
-              >
-                {states.map((st) => (
-                  <option key={st} value={st}>
-                    {st === 'All' ? 'All Indian States' : st}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* State / District Selector */}
+          <div className="flex items-center gap-2">
+            <select
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
+              className="px-3.5 py-2.5 rounded-2xl bg-white border border-stone-200 text-xs sm:text-sm font-semibold text-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs cursor-pointer"
+            >
+              {states.map((s) => (
+                <option key={s} value={s}>
+                  {s === 'All' ? t('produce.allStates') : s}
+                </option>
+              ))}
+            </select>
 
-            <div className="flex items-center gap-2 bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 shrink-0">
-              <Scale className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>Min: {minQty} Qtl</span>
-              <input
-                type="range"
-                min="0"
-                max="300"
-                step="25"
-                value={minQty}
-                onChange={(e) => setMinQty(Number(e.target.value))}
-                className="w-18 sm:w-24 accent-emerald-600 cursor-pointer"
-              />
-            </div>
+            {minQty > 0 && (
+              <button
+                onClick={() => setMinQty(0)}
+                className="px-3 py-2 text-xs font-semibold rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors cursor-pointer"
+              >
+                {t('produce.clearFilters')}
+              </button>
+            )}
           </div>
+
         </div>
 
-        {/* Category Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          <span className="text-slate-400 font-semibold px-1 shrink-0 flex items-center gap-1">
-            <Filter className="w-3 h-3" /> Categories:
-          </span>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg font-semibold shrink-0 transition-all cursor-pointer ${
-                selectedCategory === cat
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Horizontal Category Chips Ribbon */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+          {categories.map((cat) => {
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-emerald-800 text-white shadow-xs'
+                    : 'bg-white border border-stone-200/90 text-stone-600 hover:text-stone-900 hover:bg-stone-50'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Produce Grid */}
+      {/* 3. Produce Lots Catalog Cards */}
       {filteredProduce.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-3">
-          <Package className="w-12 h-12 text-slate-300 mx-auto" />
-          <h3 className="text-lg font-bold text-slate-700">No matching produce listings found</h3>
-          <p className="text-sm text-slate-500 max-w-md mx-auto">
-            Try adjusting your search keywords, clear category filters, or lower the minimum quantity threshold.
+        <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center space-y-3">
+          <div className="w-16 h-16 rounded-2xl bg-stone-100 text-stone-400 flex items-center justify-center mx-auto">
+            <Package className="w-8 h-8" />
+          </div>
+          <h3 className="text-base font-bold text-stone-900">{t('produce.noResultsTitle')}</h3>
+          <p className="text-xs sm:text-sm text-stone-500 max-w-md mx-auto">
+            {t('produce.noResultsDesc')}
           </p>
-          <button
-            onClick={() => {
-              setSelectedCategory('All');
-              setSelectedState('All');
-              setSearchTerm('');
-              setMinQty(0);
-            }}
-            className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-semibold text-xs hover:bg-emerald-700 transition-colors cursor-pointer"
-          >
-            Reset All Filters
-          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProduce.map((item) => {
-            const followed = isFollowing(item.farmerId);
+            const followed = isFollowing(item.farmerId || item.id);
+            const premiumGain = item.apmcBenchmark
+              ? (((item.expectedPrice - item.apmcBenchmark) / item.apmcBenchmark) * 100).toFixed(1)
+              : null;
+
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-emerald-300 transition-all flex flex-col group"
+                className="bg-white rounded-2xl border border-stone-200/90 shadow-xs hover:border-emerald-300 card-hover flex flex-col justify-between overflow-hidden"
               >
-                {/* Image Banner */}
-                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img
-                    src={item.image}
-                    alt={item.cropName}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-md text-[11px] font-bold text-emerald-900 shadow-xs flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    {item.category}
-                  </div>
-                  <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-semibold text-white">
-                    {item.id}
-                  </div>
-                </div>
+                <div>
+                  
+                  {/* Photo Container with Tags */}
+                  <div className="relative aspect-video w-full overflow-hidden bg-stone-100">
+                    <img
+                      src={item.image}
+                      alt={item.cropName}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      loading="lazy"
+                    />
+                    
+                    {/* Category Tag */}
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2.5 py-1 rounded-lg bg-stone-900/80 backdrop-blur-xs text-white text-[11px] font-bold">
+                        {item.category}
+                      </span>
+                    </div>
 
-                {/* Card Body */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                  <div>
-                    {/* Title and Farmer */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="font-bold text-lg text-slate-900 group-hover:text-emerald-700 transition-colors">
+                    {/* Verified Grower Badge */}
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2.5 py-1 rounded-lg bg-emerald-800/90 backdrop-blur-xs text-white text-[11px] font-bold inline-flex items-center gap-1">
+                        <ShieldCheck className="w-3 h-3 text-emerald-300" />
+                        {t('produce.verifiedFarmer')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-5 space-y-3.5">
+                    
+                    {/* Title & Farmer Identity */}
+                    <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-base font-bold text-stone-900 leading-snug">
                           {item.cropName}
                         </h3>
-                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                          <span>{item.farmerName}</span>
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 inline" />
-                        </p>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-stone-100 text-stone-700 shrink-0">
+                          {item.variety}
+                        </span>
                       </div>
 
-                      {/* Follow Button */}
-                      <button
-                        onClick={() =>
-                          onToggleFollow({
-                            id: item.farmerId,
-                            name: item.farmerName,
-                            type: 'farmer',
-                            location: `${item.district}, ${item.state}`,
-                            crops: item.cropName
-                          })
-                        }
-                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
-                          followed
-                            ? 'bg-purple-100 text-purple-800 border border-purple-200'
-                            : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                        }`}
-                        title={followed ? 'Following this farmer' : 'Follow for harvest alerts'}
-                      >
-                        {followed ? (
-                          <>
-                            <UserCheck className="w-3.5 h-3.5 text-purple-700" />
-                            <span>Following</span>
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="w-3.5 h-3.5" />
-                            <span>Follow</span>
-                          </>
-                        )}
-                      </button>
+                      <div className="flex items-center gap-1.5 text-xs text-stone-500 mt-1">
+                        <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                        <span className="truncate">{item.location || item.district}</span>
+                        <span>&bull;</span>
+                        <span className="truncate text-stone-700 font-semibold">{item.farmerName}</span>
+                      </div>
                     </div>
 
-                    {/* Quantity & Price Highlighting */}
-                    <div className="mt-4 grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    {/* Pricing Comparison Box */}
+                    <div className="p-3 rounded-xl bg-stone-50 border border-stone-100 flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
-                          Available Lot
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                          {t('produce.farmGatePrice')}
                         </span>
-                        <div className="text-base font-extrabold text-slate-900 flex items-baseline gap-1">
-                          <span>{item.quantity}</span>
-                          <span className="text-xs text-slate-500 font-semibold">{item.unit}</span>
+                        <div className="text-lg font-black text-emerald-900">
+                          ₹{item.expectedPrice.toLocaleString('en-IN')}{' '}
+                          <span className="text-xs font-normal text-stone-500">/{item.unit}</span>
                         </div>
-                        <span className="text-[10px] text-slate-400">MOQ: {item.moq} Qtl</span>
                       </div>
 
-                      <div className="text-right">
-                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
-                          Expected Price
-                        </span>
-                        <div className="text-base font-extrabold text-emerald-700">
-                          ₹{item.expectedPrice.toLocaleString()}
-                          <span className="text-xs font-medium text-slate-500">/{item.unit}</span>
+                      {item.apmcBenchmark && (
+                        <div className="text-right">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                            {t('produce.mandiBenchmark')}
+                          </span>
+                          <span className="text-xs font-bold text-stone-700">
+                            ₹{item.apmcBenchmark.toLocaleString('en-IN')}/{item.unit}
+                          </span>
+                          {premiumGain && (
+                            <span className="text-[10px] block font-bold text-emerald-700">
+                              {Number(premiumGain) >= 0 ? `+${premiumGain}% vs MSP` : `${premiumGain}% vs MSP`}
+                            </span>
+                          )}
                         </div>
-                        <span className="text-[10px] text-slate-500 flex items-center justify-end gap-0.5">
-                          <TrendingUp className="w-2.5 h-2.5 text-emerald-600" /> MSP: ₹{item.marketMsp}
-                        </span>
+                      )}
+                    </div>
+
+                    {/* Lot Specs: Quantity, MOQ, Harvest Date */}
+                    <div className="grid grid-cols-3 gap-2 py-1 text-center border-t border-stone-100 text-xs">
+                      <div className="p-1.5 rounded-lg bg-stone-50/70">
+                        <span className="text-[10px] text-stone-500 block">{t('produce.lotAvailable')}</span>
+                        <strong className="text-stone-900 font-bold">{item.quantity} {item.unit}</strong>
+                      </div>
+                      <div className="p-1.5 rounded-lg bg-stone-50/70">
+                        <span className="text-[10px] text-stone-500 block">{t('produce.moq')}</span>
+                        <strong className="text-stone-900 font-bold">{item.minOrderQuantity || 10} {item.unit}</strong>
+                      </div>
+                      <div className="p-1.5 rounded-lg bg-stone-50/70">
+                        <span className="text-[10px] text-stone-500 block">{t('produce.harvestDate')}</span>
+                        <strong className="text-stone-900 font-bold">{item.harvestDate}</strong>
                       </div>
                     </div>
 
-                    {/* Metadata Specs */}
-                    <div className="mt-3 space-y-1 text-xs text-slate-600">
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Quality Grade:</span>
-                        <span className="font-medium text-slate-700 text-right">{item.grade}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Location:</span>
-                        <span className="font-medium text-slate-700 flex items-center gap-0.5">
-                          <MapPin className="w-3 h-3 text-slate-400" />
-                          {item.district}, {item.state}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Harvest Date:</span>
-                        <span className="font-medium text-slate-700 flex items-center gap-0.5">
-                          <Calendar className="w-3 h-3 text-slate-400" />
-                          {item.harvestDate}
-                        </span>
-                      </div>
-                    </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
-                    <button
-                      onClick={() => setActiveModalItem(item)}
-                      className="px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs transition-colors cursor-pointer"
-                    >
-                      View Specs
-                    </button>
-                    <button
-                      onClick={() => onContactFarmer(item)}
-                      className="flex-1 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-600/20 transition-all cursor-pointer"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5" />
-                      Contact & Negotiate
-                    </button>
-                  </div>
                 </div>
+
+                {/* Card Action Footer */}
+                <div className="p-5 pt-0 flex items-center gap-2">
+                  <button
+                    onClick={() => onContactFarmer(item)}
+                    className="flex-1 py-2 px-3 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>{t('produce.contactFarmer')}</span>
+                  </button>
+
+                  <button
+                    onClick={() => onToggleFollow({ id: item.farmerId || item.id, name: item.farmerName, location: item.location || item.district, type: 'farmer' })}
+                    className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer ${
+                      followed
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                        : 'border-stone-200 text-stone-600 hover:bg-stone-50'
+                    }`}
+                    title={followed ? t('produce.following') : t('produce.followFarmer')}
+                  >
+                    {followed ? <UserCheck className="w-3.5 h-3.5 text-emerald-700" /> : <UserPlus className="w-3.5 h-3.5" />}
+                    <span className="hidden sm:inline">{followed ? t('produce.following') : t('produce.followFarmer')}</span>
+                  </button>
+                </div>
+
               </div>
             );
           })}
         </div>
       )}
 
-      {/* Details Modal */}
+      {/* Produce Detail Modal */}
       {activeModalItem && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 animate-in fade-in zoom-in-95 duration-200">
-            <button
-              onClick={() => setActiveModalItem(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3">
-              <img
-                src={activeModalItem.image}
-                alt={activeModalItem.cropName}
-                className="w-16 h-16 rounded-2xl object-cover"
-              />
-              <div>
-                <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">
-                  {activeModalItem.category}
-                </span>
-                <h3 className="text-xl font-bold text-slate-900 mt-1">{activeModalItem.cropName}</h3>
-                <p className="text-xs text-slate-500">Listed by {activeModalItem.farmerName} • ID: {activeModalItem.id}</p>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <h3 className="text-lg font-bold text-stone-900">{activeModalItem.cropName}</h3>
+              <button onClick={() => setActiveModalItem(null)} className="p-1 rounded-lg text-stone-400 hover:text-stone-700 cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
             </div>
-
-            <p className="text-sm text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-              {activeModalItem.description}
-            </p>
-
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Total Stock</span>
-                <span className="font-bold text-slate-800 text-sm">{activeModalItem.quantity} {activeModalItem.unit}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Minimum Order (MOQ)</span>
-                <span className="font-bold text-slate-800 text-sm">{activeModalItem.moq} {activeModalItem.unit}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Expected Rate</span>
-                <span className="font-bold text-emerald-700 text-sm">₹{activeModalItem.expectedPrice}/{activeModalItem.unit}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Govt. MSP Benchmark</span>
-                <span className="font-bold text-slate-700 text-sm">₹{activeModalItem.marketMsp}/{activeModalItem.unit}</span>
-              </div>
-            </div>
-
-            <div className="pt-2 flex items-center gap-3">
-              <button
-                onClick={() => setActiveModalItem(null)}
-                className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-xs cursor-pointer hover:bg-slate-50"
-              >
+            <img src={activeModalItem.image} alt={activeModalItem.cropName} className="w-full h-48 rounded-xl object-cover" />
+            <p className="text-xs text-stone-600 leading-relaxed">{activeModalItem.description}</p>
+            <div className="flex justify-end gap-2 pt-2">
+              <button onClick={() => setActiveModalItem(null)} className="px-4 py-2 rounded-xl border border-stone-200 text-xs font-semibold">
                 Close
               </button>
               <button
                 onClick={() => {
-                  const itm = activeModalItem;
+                  onContactFarmer(activeModalItem);
                   setActiveModalItem(null);
-                  onContactFarmer(itm);
                 }}
-                className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-emerald-800 text-white text-xs font-bold"
               >
-                <MessageSquare className="w-3.5 h-3.5" />
-                Negotiate Deal
+                {t('produce.contactFarmer')}
               </button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
