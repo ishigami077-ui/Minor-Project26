@@ -20,7 +20,7 @@ import {
   Layers, 
   CheckCircle2, 
   Heart,
-  Github
+  GitBranch
 } from 'lucide-react';
 
 export default function App() {
@@ -240,7 +240,7 @@ export default function App() {
                 rel="noreferrer" 
                 className="hover:text-slate-900 flex items-center gap-1 transition-colors"
               >
-                <Github className="w-4 h-4" />
+                <GitBranch className="w-4 h-4" />
                 GitHub Repository
               </a>
             </div>

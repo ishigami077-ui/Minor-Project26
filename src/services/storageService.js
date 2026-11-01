@@ -20,12 +20,22 @@ export const storageService = {
   getCurrentRole: () => {
     return localStorage.getItem(STORAGE_KEYS.CURRENT_ROLE) || 'farmer';
   },
+  getActiveRole: () => {
+    return localStorage.getItem(STORAGE_KEYS.CURRENT_ROLE) || 'farmer';
+  },
   setCurrentRole: (role) => {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_ROLE, role);
+  },
+  setActiveRole: (role) => {
     localStorage.setItem(STORAGE_KEYS.CURRENT_ROLE, role);
   },
 
   // Users
   getUserProfile: (role) => {
+    return INITIAL_USERS[role] || INITIAL_USERS.farmer;
+  },
+  getCurrentUser: () => {
+    const role = localStorage.getItem(STORAGE_KEYS.CURRENT_ROLE) || 'farmer';
     return INITIAL_USERS[role] || INITIAL_USERS.farmer;
   },
 
