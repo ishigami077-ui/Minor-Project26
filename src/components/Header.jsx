@@ -3,6 +3,8 @@ import {
   Wheat,
   Tractor,
   Store,
+  Scale,
+  CloudSun,
   MessageSquare,
   Users,
   FileText,
@@ -116,7 +118,7 @@ export function Header({
             </div>
           </div>
 
-          {/* Navigation Items (Clean, No-Wrap Horizontal List) */}
+          {/* Navigation Items (Clean, Horizontal List) */}
           <nav className="hidden lg:flex items-center gap-1 bg-stone-100/90 p-1 rounded-xl border border-stone-200/80">
             <button
               onClick={() => onTabChange('marketplace')}
@@ -140,6 +142,33 @@ export function Header({
             >
               <Tractor className="w-3.5 h-3.5 text-amber-600" />
               <span>{t('nav.machinery')}</span>
+            </button>
+
+            {/* Live Mandi Tab */}
+            <button
+              onClick={() => onTabChange('mandi')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                activeTab === 'mandi'
+                  ? 'bg-white text-emerald-900 shadow-xs border border-stone-200'
+                  : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              <Scale className="w-3.5 h-3.5 text-emerald-700" />
+              <span>{t('nav.mandi')}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </button>
+
+            {/* Live Weather Tab */}
+            <button
+              onClick={() => onTabChange('weather')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                activeTab === 'weather'
+                  ? 'bg-white text-emerald-900 shadow-xs border border-stone-200'
+                  : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              <CloudSun className="w-3.5 h-3.5 text-sky-600" />
+              <span>{t('nav.weather')}</span>
             </button>
 
             {activeRole === 'farmer' && (
@@ -300,6 +329,24 @@ export function Header({
             }`}
           >
             {t('nav.machinery')}
+          </button>
+          <button
+            onClick={() => onTabChange('mandi')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+              activeTab === 'mandi' ? 'bg-emerald-800 text-white' : 'text-stone-600 bg-stone-100'
+            }`}
+          >
+            <Scale className="w-3 h-3 text-emerald-600" />
+            <span>{t('nav.mandi')}</span>
+          </button>
+          <button
+            onClick={() => onTabChange('weather')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+              activeTab === 'weather' ? 'bg-emerald-800 text-white' : 'text-stone-600 bg-stone-100'
+            }`}
+          >
+            <CloudSun className="w-3 h-3 text-sky-600" />
+            <span>{t('nav.weather')}</span>
           </button>
           {activeRole === 'farmer' && (
             <button

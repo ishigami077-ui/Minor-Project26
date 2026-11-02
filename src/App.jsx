@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { ProduceMarketplace } from './components/ProduceMarketplace';
 import { EquipmentMarketplace } from './components/EquipmentMarketplace';
+import { LiveMandiSection } from './components/LiveMandiSection';
+import { LiveWeatherSection } from './components/LiveWeatherSection';
 import { FarmerDashboard } from './components/FarmerDashboard';
 import { MessagingHub } from './components/MessagingHub';
 import { FollowedFeed } from './components/FollowedFeed';
@@ -16,6 +18,8 @@ import {
   Bot, 
   Sparkles, 
   Wheat, 
+  Scale,
+  CloudSun,
   GraduationCap, 
   ShieldCheck, 
   Layers, 
@@ -29,6 +33,9 @@ function MainApp() {
   const [activeRole, setActiveRole] = useState(storageService.getActiveRole() || 'farmer');
   const [activeTab, setActiveTab] = useState('marketplace');
   
+  // Cross-Navigation & Search Filter
+  const [produceFilterTerm, setProduceFilterTerm] = useState('');
+
   // Data State
   const [produceList, setProduceList] = useState(storageService.getProduceListings());
   const [equipmentList, setEquipmentList] = useState(storageService.getEquipmentListings());
@@ -85,6 +92,16 @@ function MainApp() {
 
   const isFollowing = (id) => follows.some(f => f.id === id);
 
+  const handleNavigateToProduceWithCrop = (cropName) => {
+    setProduceFilterTerm(cropName);
+    setActiveTab('marketplace');
+    showNotification(
+      lang === 'hi'
+        ? `बाज़ार में "${cropName}" के सक्रिय लॉट खोजे जा रहे हैं`
+        : `Searching marketplace for "${cropName}" lots`
+    );
+  };
+
   return (
     <div className={`min-h-screen bg-[#faf9f6] flex flex-col text-stone-850 antialiased font-sans ${lang === 'hi' ? 'hindi-text' : ''}`}>
       
@@ -119,6 +136,7 @@ function MainApp() {
             isFollowing={isFollowing}
             onOpenAddProduceModal={() => setIsAddProduceOpen(true)}
             activeRole={activeRole}
+            initialSearchTerm={produceFilterTerm}
           />
         )}
 
@@ -129,6 +147,16 @@ function MainApp() {
             onOpenAddEquipmentModal={() => setIsAddEquipmentOpen(true)}
             activeRole={activeRole}
           />
+        )}
+
+        {activeTab === 'mandi' && (
+          <LiveMandiSection
+            onNavigateToProduceWithCrop={handleNavigateToProduceWithCrop}
+          />
+        )}
+
+        {activeTab === 'weather' && (
+          <LiveWeatherSection />
         )}
 
         {activeTab === 'farmer-desk' && (
@@ -227,6 +255,20 @@ function MainApp() {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-stone-600">
+              <button 
+                onClick={() => setActiveTab('mandi')}
+                className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Scale className="w-4 h-4 text-emerald-700" />
+                <span>{t('nav.mandi')}</span>
+              </button>
+              <button 
+                onClick={() => setActiveTab('weather')}
+                className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <CloudSun className="w-4 h-4 text-sky-600" />
+                <span>{t('nav.weather')}</span>
+              </button>
               <button 
                 onClick={() => setIsReportOpen(true)}
                 className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"

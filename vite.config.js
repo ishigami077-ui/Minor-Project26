@@ -8,4 +8,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/api/datagov': {
+        target: 'https://api.data.gov.in',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/datagov/, ''),
+      },
+    },
+  },
 });

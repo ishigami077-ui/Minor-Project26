@@ -14,7 +14,9 @@ import {
   DollarSign,
   Package,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Scale,
+  CloudSun
 } from 'lucide-react';
 import { storageService } from '../services/storageService';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -156,6 +158,52 @@ export function FarmerDashboard({
           </div>
           <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-700">
             <MessageSquare className="w-6 h-6" />
+          </div>
+        </div>
+      </div>
+
+      {/* Live Telemetry Links Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div 
+          onClick={() => onNavigateToTab('mandi')}
+          className="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white rounded-2xl p-5 border border-emerald-600/40 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+        >
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs font-bold text-emerald-300 uppercase tracking-wider">
+              <Scale className="w-3.5 h-3.5" />
+              <span>{t('nav.mandi')}</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            </div>
+            <h3 className="font-extrabold text-sm sm:text-base text-white group-hover:text-emerald-200 transition-colors">
+              {lang === 'hi' ? 'दैनिक एपीएमसी मंडी भाव देखें' : 'View Live Mandi APMC Auction Rates'}
+            </h3>
+            <p className="text-xs text-emerald-100/80">
+              {lang === 'hi' ? 'सीहोर, नागपुर व क्षेत्रीय मंडियों के आधिकारिक भाव' : 'Official benchmark prices for Wheat, Soyabean, Cotton & Dal'}
+            </p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center shrink-0 transition-colors">
+            <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        </div>
+
+        <div 
+          onClick={() => onNavigateToTab('weather')}
+          className="bg-gradient-to-r from-sky-950 via-teal-950 to-stone-900 text-white rounded-2xl p-5 border border-sky-600/40 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+        >
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs font-bold text-sky-300 uppercase tracking-wider">
+              <CloudSun className="w-3.5 h-3.5" />
+              <span>{t('nav.weather')}</span>
+            </div>
+            <h3 className="font-extrabold text-sm sm:text-base text-white group-hover:text-sky-200 transition-colors">
+              {lang === 'hi' ? 'खेत का मौसम एवं छिड़काव सलाह' : 'Field Weather & Spraying Advisory'}
+            </h3>
+            <p className="text-xs text-sky-100/80">
+              {lang === 'hi' ? 'तापमान, वर्षा अनुमान और 7-दिवसीय कृषि पूर्वानुमान' : 'Real-time temperature, rainfall chance & 7-day outlook'}
+            </p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center shrink-0 transition-colors">
+            <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
       </div>

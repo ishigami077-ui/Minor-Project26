@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -27,11 +27,16 @@ export function ProduceMarketplace({
   onToggleFollow,
   isFollowing,
   onOpenAddProduceModal,
-  activeRole
+  activeRole,
+  initialSearchTerm = ''
 }) {
   const { lang, t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm || '');
+
+  useEffect(() => {
+    if (initialSearchTerm) setSearchTerm(initialSearchTerm);
+  }, [initialSearchTerm]);
   const [selectedState, setSelectedState] = useState('All');
   const [minQty, setMinQty] = useState(0);
   const [activeModalItem, setActiveModalItem] = useState(null);
