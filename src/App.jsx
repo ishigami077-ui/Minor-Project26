@@ -103,7 +103,7 @@ function MainApp() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#faf9f6] flex flex-col text-stone-850 antialiased font-sans ${lang === 'hi' ? 'hindi-text' : ''}`}>
+    <div className={`min-h-screen w-full max-w-full bg-[#faf9f6] flex flex-col text-stone-850 antialiased font-sans ${lang === 'hi' ? 'hindi-text' : ''}`}>
       
       {/* Toast Notification Banner */}
       {toastMessage && (
@@ -126,8 +126,8 @@ function MainApp() {
         onOpenChatbot={() => setIsChatbotOpen(true)}
       />
 
-      {/* Dynamic Workspace Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Dynamic Workspace Container - Full Width, Fluid, Centered */}
+      <main className="flex-1 w-full max-w-7xl 2xl:max-w-screen-2xl mx-auto px-3 sm:px-6 lg:px-8 xl:px-10 py-6 sm:py-8">
         {activeTab === 'marketplace' && (
           <ProduceMarketplace
             produceList={produceList}
@@ -235,17 +235,17 @@ function MainApp() {
         onClose={() => setIsReportOpen(false)}
       />
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-stone-200 mt-16 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* Footer - Full Width, Centered */}
+      <footer className="bg-white border-t border-stone-200 mt-16 py-10 w-full">
+        <div className="w-full max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-stone-100">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <div className="flex items-center gap-2">
-                <Wheat className="w-5 h-5 text-emerald-800" />
+                <Wheat className="w-5 h-5 text-emerald-800 shrink-0" />
                 <span className="font-extrabold text-base text-stone-900">
                   {lang === 'hi' ? 'किसान सेतु (Kisan Setu)' : 'Kisan Setu (किसान सेतु)'}
                 </span>
-                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full shrink-0">
                   Minor Project 2026
                 </span>
               </div>
@@ -254,7 +254,7 @@ function MainApp() {
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-stone-600">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-stone-600 shrink-0">
               <button 
                 onClick={() => setActiveTab('mandi')}
                 className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"

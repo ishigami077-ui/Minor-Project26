@@ -183,7 +183,7 @@ export function LiveWeatherSection() {
   const todayForecast = weatherData?.daily?.[0];
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="w-full space-y-6 animate-fade-in max-w-full">
       
       {/* 1. Header & Live Indicator */}
       <div className="bg-gradient-to-br from-sky-950 via-teal-950 to-stone-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
@@ -428,7 +428,7 @@ export function LiveWeatherSection() {
             </div>
 
             {/* Right Metrics Grid (7 Cols) */}
-            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-2 gap-4">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               
               {/* Relative Humidity */}
               <div className="bg-white rounded-2xl p-5 border border-stone-200/90 shadow-2xs hover:border-emerald-300 transition-all">
@@ -650,12 +650,12 @@ export function LiveWeatherSection() {
                 return (
                   <div
                     key={day.date}
-                    className={`py-3.5 px-3 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
+                    className={`py-3 px-3 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors w-full ${
                       isToday ? 'bg-emerald-50/40 font-bold' : 'hover:bg-stone-50'
                     }`}
                   >
                     {/* Day & Date */}
-                    <div className="flex items-center gap-3 w-40">
+                    <div className="flex items-center gap-2.5 sm:gap-3 w-full md:w-36 shrink-0">
                       <span className={`text-xs sm:text-sm font-bold ${isToday ? 'text-emerald-900' : 'text-stone-850'}`}>
                         {isToday ? (lang === 'hi' ? 'आज' : 'Today') : day.dayName}
                       </span>
@@ -665,7 +665,7 @@ export function LiveWeatherSection() {
                     </div>
 
                     {/* Condition Icon & Text */}
-                    <div className="flex items-center gap-2.5 flex-1 min-w-[160px]">
+                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
                       {renderWeatherIcon(weatherService.mapWmoCode(day.code).iconType, 'w-5 h-5')}
                       <span className="text-xs font-semibold text-stone-700 truncate">
                         {lang === 'hi'
@@ -675,7 +675,7 @@ export function LiveWeatherSection() {
                     </div>
 
                     {/* Precipitation Prob */}
-                    <div className="flex items-center gap-2 text-xs font-bold text-blue-700 w-28">
+                    <div className="flex items-center gap-2 text-xs font-bold text-blue-700 w-auto md:w-28 shrink-0">
                       <CloudRain className="w-3.5 h-3.5 text-blue-500" />
                       <span>{day.rainProbMax}%</span>
                       {day.precipitationSum > 0 && (
@@ -686,7 +686,7 @@ export function LiveWeatherSection() {
                     </div>
 
                     {/* Temperature Range Bar */}
-                    <div className="flex items-center gap-3 w-48 justify-end">
+                    <div className="flex items-center gap-3 w-auto md:w-44 justify-start md:justify-end shrink-0">
                       <span className="text-xs font-bold text-stone-500">{day.minTemp}°</span>
                       <div className="w-24 bg-stone-200 h-2 rounded-full overflow-hidden flex">
                         <div

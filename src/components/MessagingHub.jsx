@@ -118,7 +118,7 @@ export function MessagingHub({ onShowNotification, activeConversationId }) {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-stone-200/90 shadow-2xs overflow-hidden flex flex-col md:flex-row h-[750px] animate-fade-in">
+    <div className="w-full max-w-full bg-white rounded-3xl border border-stone-200/90 shadow-2xs overflow-hidden flex flex-col md:flex-row h-[750px] animate-fade-in">
       
       {/* Left Sidebar: Conversations List */}
       <div className="w-full md:w-80 lg:w-96 border-r border-stone-200/80 flex flex-col shrink-0 bg-stone-50/50">
@@ -194,7 +194,7 @@ export function MessagingHub({ onShowNotification, activeConversationId }) {
 
       {/* Right Pane: Active Chat Window */}
       {activeConv ? (
-        <div className="flex-1 flex flex-col bg-white h-full overflow-hidden">
+        <div className="flex-1 min-w-0 flex flex-col bg-white h-full overflow-hidden">
           
           {/* Chat Header */}
           <div className="p-4 sm:p-5 border-b border-stone-200/80 flex items-center justify-between bg-white z-10 shadow-2xs">

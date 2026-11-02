@@ -218,7 +218,7 @@ export function LiveMandiSection({ onNavigateToProduceWithCrop }) {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="w-full space-y-6 animate-fade-in max-w-full">
       
       {/* 1. Header Banner */}
       <div className="bg-gradient-to-br from-emerald-950 via-stone-900 to-stone-950 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
@@ -395,7 +395,7 @@ export function LiveMandiSection({ onNavigateToProduceWithCrop }) {
       )}
 
       {/* 3. Summary Statistics Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         
         {/* Total Rates */}
         <div className="bg-white rounded-2xl p-5 border border-stone-200/90 shadow-2xs">
@@ -530,7 +530,7 @@ export function LiveMandiSection({ onNavigateToProduceWithCrop }) {
         </div>
 
         {/* Dropdown Filters Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 w-full">
           
           {/* State Filter */}
           <select

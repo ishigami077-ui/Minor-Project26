@@ -63,32 +63,32 @@ export function FarmerDashboard({
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="w-full space-y-6 sm:space-y-8 animate-fade-in">
       
       {/* 1. Farmer Greeting Banner */}
-      <div className="bg-gradient-to-br from-emerald-950 via-emerald-900 to-stone-900 rounded-3xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
+      <div className="w-full bg-gradient-to-br from-emerald-950 via-emerald-900 to-stone-900 rounded-3xl p-5 sm:p-8 lg:p-10 text-white shadow-lg relative overflow-hidden">
         <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-emerald-700/15 rounded-full blur-3xl pointer-events-none" />
         
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 w-full">
+          <div className="space-y-2.5 max-w-3xl flex-1 min-w-0">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/80 border border-emerald-400/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
               <Sprout className="w-3.5 h-3.5 text-emerald-400" />
               {t('farmerDesk.badge')}
             </div>
             
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
               {t('farmerDesk.welcome')}, {currentFarmer.name}!
             </h1>
             
-            <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-stone-300 text-xs sm:text-sm lg:text-base leading-relaxed">
               {t('farmerDesk.subtitle')}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
             <button
               onClick={onOpenAddModal}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
               <PlusCircle className="w-4 h-4 text-stone-950" />
               <span>{t('produce.listCropBtn')}</span>
@@ -105,79 +105,79 @@ export function FarmerDashboard({
       </div>
 
       {/* 2. Farmer KPI Telemetry Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between">
-          <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between gap-3 w-full min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider">{t('farmerDesk.activeLots')}</p>
             <p className="text-2xl font-black text-stone-900 mt-1">{activeCount} Lots</p>
-            <span className="text-[11px] text-emerald-700 font-semibold inline-flex items-center gap-1 mt-1">
-              <CheckCircle2 className="w-3.5 h-3.5" /> {t('farmerDesk.readyDispatch')}
+            <span className="text-[11px] text-emerald-700 font-semibold inline-flex items-center gap-1 mt-1 truncate">
+              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> {t('farmerDesk.readyDispatch')}
             </span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
             <Package className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between gap-3 w-full min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider">{t('farmerDesk.totalVolume')}</p>
             <p className="text-2xl font-black text-stone-900 mt-1">{totalQuantity} Qtl</p>
-            <span className="text-[11px] text-stone-500 font-medium inline-flex items-center gap-1 mt-1">
-              <Layers className="w-3.5 h-3.5" /> {t('farmerDesk.acrossCommodities')}
+            <span className="text-[11px] text-stone-500 font-medium inline-flex items-center gap-1 mt-1 truncate">
+              <Layers className="w-3.5 h-3.5 shrink-0" /> {t('farmerDesk.acrossCommodities')}
             </span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-700">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-700 shrink-0">
             <Sprout className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between gap-3 w-full min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider">{t('farmerDesk.estValue')}</p>
             <p className="text-2xl font-black text-emerald-800 mt-1">₹{totalValue.toLocaleString('en-IN')}</p>
-            <span className="text-[11px] text-stone-500 font-medium inline-flex items-center gap-1 mt-1">
-              <DollarSign className="w-3.5 h-3.5" /> {t('farmerDesk.realizableGate')}
+            <span className="text-[11px] text-stone-500 font-medium inline-flex items-center gap-1 mt-1 truncate">
+              <DollarSign className="w-3.5 h-3.5 shrink-0" /> {t('farmerDesk.realizableGate')}
             </span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700">
+          <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 shrink-0">
             <TrendingUp className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs flex items-center justify-between gap-3 w-full min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider">{t('farmerDesk.buyerInquiries')}</p>
             <p className="text-2xl font-black text-stone-900 mt-1">6 Active</p>
             <button 
               onClick={onNavigateToMessages}
-              className="text-[11px] text-blue-700 hover:text-blue-900 font-bold inline-flex items-center gap-1 mt-1 cursor-pointer"
+              className="text-[11px] text-blue-700 hover:text-blue-900 font-bold inline-flex items-center gap-1 mt-1 cursor-pointer truncate"
             >
-              {t('farmerDesk.openMessagingHub')} <ArrowRight className="w-3 h-3" />
+              {t('farmerDesk.openMessagingHub')} <ArrowRight className="w-3 h-3 shrink-0" />
             </button>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-700">
+          <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-700 shrink-0">
             <MessageSquare className="w-6 h-6" />
           </div>
         </div>
       </div>
 
       {/* Live Telemetry Links Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <div 
           onClick={() => onNavigateToTab('mandi')}
-          className="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white rounded-2xl p-5 border border-emerald-600/40 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+          className="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white rounded-2xl p-5 border border-emerald-600/40 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between gap-3 group w-full min-w-0"
         >
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0 flex-1">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-300 uppercase tracking-wider">
-              <Scale className="w-3.5 h-3.5" />
+              <Scale className="w-3.5 h-3.5 shrink-0" />
               <span>{t('nav.mandi')}</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
             </div>
-            <h3 className="font-extrabold text-sm sm:text-base text-white group-hover:text-emerald-200 transition-colors">
+            <h3 className="font-extrabold text-sm sm:text-base text-white group-hover:text-emerald-200 transition-colors truncate">
               {lang === 'hi' ? 'दैनिक एपीएमसी मंडी भाव देखें' : 'View Live Mandi APMC Auction Rates'}
             </h3>
-            <p className="text-xs text-emerald-100/80">
+            <p className="text-xs text-emerald-100/80 truncate">
               {lang === 'hi' ? 'सीहोर, नागपुर व क्षेत्रीय मंडियों के आधिकारिक भाव' : 'Official benchmark prices for Wheat, Soyabean, Cotton & Dal'}
             </p>
           </div>
@@ -188,17 +188,17 @@ export function FarmerDashboard({
 
         <div 
           onClick={() => onNavigateToTab('weather')}
-          className="bg-gradient-to-r from-sky-950 via-teal-950 to-stone-900 text-white rounded-2xl p-5 border border-sky-600/40 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+          className="bg-gradient-to-r from-sky-950 via-teal-950 to-stone-900 text-white rounded-2xl p-5 border border-sky-600/40 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between gap-3 group w-full min-w-0"
         >
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0 flex-1">
             <div className="flex items-center gap-2 text-xs font-bold text-sky-300 uppercase tracking-wider">
-              <CloudSun className="w-3.5 h-3.5" />
+              <CloudSun className="w-3.5 h-3.5 shrink-0" />
               <span>{t('nav.weather')}</span>
             </div>
-            <h3 className="font-extrabold text-sm sm:text-base text-white group-hover:text-sky-200 transition-colors">
+            <h3 className="font-extrabold text-sm sm:text-base text-white group-hover:text-sky-200 transition-colors truncate">
               {lang === 'hi' ? 'खेत का मौसम एवं छिड़काव सलाह' : 'Field Weather & Spraying Advisory'}
             </h3>
-            <p className="text-xs text-sky-100/80">
+            <p className="text-xs text-sky-100/80 truncate">
               {lang === 'hi' ? 'तापमान, वर्षा अनुमान और 7-दिवसीय कृषि पूर्वानुमान' : 'Real-time temperature, rainfall chance & 7-day outlook'}
             </p>
           </div>
@@ -209,19 +209,19 @@ export function FarmerDashboard({
       </div>
 
       {/* 3. Produce Lot Inventory Table / Cards */}
-      <div className="bg-white rounded-3xl border border-stone-200/90 shadow-2xs overflow-hidden">
-        <div className="p-5 sm:p-6 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-stone-50/50">
+      <div className="bg-white rounded-3xl border border-stone-200/90 shadow-2xs overflow-hidden w-full">
+        <div className="p-4 sm:p-6 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-stone-50/50 w-full">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-stone-900">{t('farmerDesk.myListingsTitle')}</h2>
             <p className="text-xs text-stone-500 mt-0.5">{t('farmerDesk.myListingsSub')}</p>
           </div>
 
-          <div className="inline-flex rounded-xl bg-stone-100 p-1 border border-stone-200 text-xs">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-stone-100 rounded-xl border border-stone-200 text-xs max-w-full">
             {['ALL', 'AVAILABLE', 'NEGOTIATING', 'SOLD'].map(status => (
               <button
                 key={status}
                 onClick={() => setFilterStatus(status)}
-                className={`px-3 py-1.5 font-bold rounded-lg transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 font-bold rounded-lg transition-colors cursor-pointer shrink-0 ${
                   filterStatus === status 
                     ? 'bg-white text-stone-900 shadow-xs' 
                     : 'text-stone-600 hover:text-stone-900'
@@ -240,7 +240,7 @@ export function FarmerDashboard({
         </div>
 
         {displayedListings.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
+          <div className="p-8 sm:p-12 text-center space-y-3">
             <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto">
               <Sprout className="w-8 h-8" />
             </div>
@@ -254,22 +254,22 @@ export function FarmerDashboard({
             </button>
           </div>
         ) : (
-          <div className="divide-y divide-stone-100">
+          <div className="divide-y divide-stone-100 w-full">
             {displayedListings.map(item => (
-              <div key={item.id} className="p-5 hover:bg-stone-50/60 transition-colors flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-                <div className="flex items-start gap-4">
+              <div key={item.id} className="p-4 sm:p-5 hover:bg-stone-50/60 transition-colors flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5 w-full">
+                <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
                   <img
                     src={item.image}
                     alt={item.cropName}
-                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-stone-200 shrink-0"
+                    className="w-16 h-16 sm:w-24 sm:h-24 rounded-2xl object-cover border border-stone-200 shrink-0"
                   />
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-base font-bold text-stone-900">{item.cropName}</h3>
-                      <span className="text-xs px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 font-semibold">
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <h3 className="text-sm sm:text-base font-bold text-stone-900">{item.cropName}</h3>
+                      <span className="text-[11px] sm:text-xs px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 font-semibold">
                         {item.variety}
                       </span>
-                      <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-bold ${
+                      <span className={`text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full font-bold ${
                         item.status === 'AVAILABLE' 
                           ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
                           : item.status === 'NEGOTIATING' 
@@ -286,7 +286,7 @@ export function FarmerDashboard({
 
                     <p className="text-xs text-stone-500 line-clamp-1">{item.description}</p>
 
-                    <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-stone-600 pt-1">
+                    <div className="flex flex-wrap items-center gap-y-1 gap-x-3 sm:gap-x-4 text-[11px] sm:text-xs text-stone-600 pt-1">
                       <span><strong>{t('produce.lotAvailable')}:</strong> {item.quantity} {item.unit}</span>
                       <span><strong>{t('produce.moq')}:</strong> {item.minOrderQuantity || 10} {item.unit}</span>
                       <span><strong>{t('produce.harvestDate')}:</strong> {item.harvestDate}</span>
@@ -294,22 +294,22 @@ export function FarmerDashboard({
                     </div>
 
                     {item.apmcBenchmark && (
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-900 text-[11px] font-semibold border border-amber-200/80">
-                        <TrendingUp className="w-3 h-3 text-amber-700" />
-                        {t('produce.mandiBenchmark')}: ₹{item.apmcBenchmark}/{item.unit} &middot; {t('produce.farmGatePrice')}: ₹{item.expectedPrice}/{item.unit}
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-900 text-[10px] sm:text-[11px] font-semibold border border-amber-200/80 mt-1 max-w-full truncate">
+                        <TrendingUp className="w-3 h-3 text-amber-700 shrink-0" />
+                        <span className="truncate">{t('produce.mandiBenchmark')}: ₹{item.apmcBenchmark}/{item.unit} &middot; {t('produce.farmGatePrice')}: ₹{item.expectedPrice}/{item.unit}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Right controls */}
-                <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between gap-3 shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-stone-100">
+                <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between gap-3 shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-stone-100 w-full lg:w-auto">
                   <div className="text-left lg:text-right">
-                    <div className="text-xl font-black text-emerald-900">
+                    <div className="text-lg sm:text-xl font-black text-emerald-900">
                       ₹{item.expectedPrice.toLocaleString('en-IN')}{' '}
                       <span className="text-xs text-stone-500 font-normal">/{item.unit}</span>
                     </div>
-                    <div className="text-xs text-stone-500 font-medium">
+                    <div className="text-[11px] sm:text-xs text-stone-500 font-medium">
                       Est. Total: ₹{(item.quantity * item.expectedPrice).toLocaleString('en-IN')}
                     </div>
                   </div>
@@ -341,14 +341,14 @@ export function FarmerDashboard({
       </div>
 
       {/* Advisory & Support Strip */}
-      <div className="bg-amber-50/70 border border-amber-200/80 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-start gap-3.5">
+      <div className="bg-amber-50/70 border border-amber-200/80 rounded-3xl p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+        <div className="flex items-start gap-3.5 min-w-0 flex-1">
           <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <h4 className="text-sm font-bold text-amber-950">{t('farmerDesk.fairPriceNote')}</h4>
-            <p className="text-xs text-amber-900/80 max-w-xl mt-0.5 leading-relaxed">
+            <p className="text-xs text-amber-900/80 max-w-2xl mt-0.5 leading-relaxed">
               {t('farmerDesk.fairPriceDesc')}
             </p>
           </div>

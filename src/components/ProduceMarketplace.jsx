@@ -72,7 +72,7 @@ export function ProduceMarketplace({
   });
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="w-full max-w-full space-y-8 animate-fade-in">
       
       {/* 1. Hero Banner */}
       <div className="bg-gradient-to-br from-emerald-950 via-emerald-900 to-stone-900 rounded-3xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
